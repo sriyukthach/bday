@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Happy Birthday</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;600;900&family=Space+Grotesk:wght@400;500;700&display=swap');
+
+    :root {
+      --ink: #241933;
+      --paper: #FFF7EC;
+      --violet: #6E3ACB;
+      --pink: #FF5FA2;
+      --gold: #FFB627;
+      --teal: #1FBFA8;
+      --cream: #FFE9C7;
+      --frosting: #FFD8E8;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--paper);
+      font-family: 'Space Grotesk', sans-serif;
+      overflow: hidden;
+      position: relative;
+      padding: 24px;
+    }
+
+    /* Background Containers */
+    .bg-quotes-container, .bg-photos-container {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .bg-photos-container {
+      z-index: 0;
+    }
+
+    .bg-quotes-container {
+      z-index: 1;
+    }
+
+    /* --- System 1: Moving Text Quotes --- */
+    .floating-quote {
+      position: absolute;
+      font-family: 'Fraunces', serif;
+      font-weight: 600;
+      font-style: italic;
+      font-size: clamp(14px, 2.2vw, 18px);
+      color: var(--ink);
+      opacity: 0;
+      white-space: normal; /* Changed from nowrap to allow clean wrapping */
+      max-width: 14vw;    /* Restricts width so text stacks vertically on the sides */
+      line-height: 1.4;
+      transform-origin: center;
+      animation: floatUpWord var(--dur) linear var(--delay) forwards;
+    }
+
+    @keyframes floatUpWord {
+      0% {
+        transform: translateY(105vh) rotate(var(--rot));
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.45;
+      }
+      85% {
+        opacity: 0.45;
+      }
+      100% {
+        transform: translateY(-25vh) rotate(var(--rot));
+        opacity: 0;
+      }
+    }
+
+    /* --- System 2: Lazily Drifting Photos --- */
+    .drifting-photo {
+      position: absolute;
+      width: clamp(105px, 13vw, 145px);
+      height: auto;
+      border-radius: 12px;
+      border: 5px solid #fff;
+      box-shadow: 0 8px 24px rgba(36, 25, 51, 0.15);
+      opacity: 0.80;
+      object-fit: cover;
+      transform-origin: center;
+      animation: floatingDrift var(--dur) ease-in-out var(--delay) infinite alternate;
+    }
+
+    /* Forces specific aspect-ratio so the wide layout image displays correctly */
+    .drifting-photo.horizontal-slot {
+      width: clamp(155px, 19vw, 210px) !important;
+      aspect-ratio: 4 / 3 !important;
+      height: auto !important;
+    }
+
+    @keyframes floatingDrift {
+      0% {
+        transform: translate(0, 0) rotate(var(--rot));
+      }
+      33% {
+        transform: translate(15px, -20px) rotate(calc(var(--rot) + 2deg));
+      }
+      66% {
+        transform: translate(-10px, -35px) rotate(calc(var(--rot) - 2deg));
+      }
+      100% {
+        transform: translate(8px, -50px) rotate(calc(var(--rot) + 1deg));
+      }
+    }
+
+    /* streamer signature */
+    .streamers {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .streamer {
+      position: absolute;
+      top: -10%;
+      width: 10px;
+      height: 120%;
+      transform-origin: top center;
+      animation: sway 6s ease-in-out infinite;
+      border-radius: 6px;
+      opacity: 0.4;
+    }
+
+    @keyframes sway {
+      0%, 100% { transform: rotate(-6deg); }
+      50% { transform: rotate(6deg); }
+    }
+
+    .stage {
+      position: relative;
+      z-index: 3;
+      width: min(560px, 100%);
+    }
+
+    .card {
+      background: var(--ink);
+      color: var(--paper);
+      width: 100%;
+      padding: 52px 40px 40px;
+      border-radius: 28px;
+      text-align: center;
+      box-shadow: 0 30px 60px -20px rgba(36,25,51,0.5);
+      border: 3px solid rgba(255,247,236,0.08);
+      position: relative;
+      min-height: 480px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .scene {
+      display: none;
+      width: 100%;
+      flex-direction: column;
+      align-items: center;
+      animation: fadeUp 0.5s ease both;
+    }
+
+    .scene.active {
+      display: flex;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .eyebrow {
+      font-size: 13px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-family: 'Fraunces', serif;
+      font-weight: 900;
+      font-size: clamp(34px, 7vw, 52px);
+      line-height: 1.04;
+      margin: 0 0 6px;
+    }
+
+    h1 span {
+      color: var(--pink);
+      font-style: italic;
+      font-weight: 600;
+    }
+
+    .sub {
+      font-size: 15px;
+      color: rgba(255,247,236,0.7);
+      max-width: 380px;
+      margin: 0 auto 24px;
+      line-height: 1.55;
+    }
+
+    .btn {
+      background: var(--pink);
+      color: var(--ink);
+      border: none;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      padding: 13px 30px;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+
+    .btn:hover {
+      background: var(--gold);
+      transform: translateY(-2px);
+    }
+
+    .btn.ghost {
+      background: transparent;
+      color: var(--paper);
+      border: 2px solid rgba(255,247,236,0.25);
+    }
+
+    .btn.ghost:hover {
+      background: rgba(255,247,236,0.08);
+      color: var(--paper);
+    }
+
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .row {
+      display: flex;
+      gap: 12px;
+      margin-top: 22px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .dots {
+      display: flex;
+      gap: 8px;
+      margin-top: 28px;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: rgba(255,247,236,0.2);
+      transition: background 0.2s;
+    }
+
+    .dot.on {
+      background: var(--pink);
+    }
+
+    /* --------- Scene 2: candles / wish --------- */
+    .candle-cake {
+      position: relative;
+      width: 220px;
+      height: 150px;
+      margin: 10px 0 8px;
+    }
+
+    .tier.bottom {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 10px;
+      width: 220px;
+      height: 70px;
+      bottom: 0;
+      background: linear-gradient(180deg, var(--frosting), var(--pink));
+    }
+
+    .tier.top {
+      width: 160px;
+      height: 55px;
+      bottom: 62px;
+      background: linear-gradient(180deg, #fff, var(--frosting));
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 10px;
+    }
+
+    .candles-wrap {
+      position: absolute;
+      bottom: 112px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 22px;
+    }
+
+    .candle {
+      width: 8px;
+      height: 38px;
+      background: linear-gradient(180deg, var(--gold), #fff2cf);
+      border-radius: 3px;
+      position: relative;
+    }
+
+    .flame {
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 11px;
+      height: 16px;
+      border-radius: 60% 60% 40% 40% / 80% 80% 40% 40%;
+      background: radial-gradient(circle at 50% 70%, #fff6c8, var(--gold) 55%, #ff8a3d 90%);
+      animation: flicker 1.4s ease-in-out infinite;
+      transform-origin: bottom center;
+    }
+
+    @keyframes flicker {
+      0%, 100% { transform: translateX(-50%) scale(1) rotate(-2deg); }
+      50% { transform: translateX(-50%) scale(1.12) rotate(3deg); }
+    }
+
+    .flame.out {
+      animation: none;
+      opacity: 0;
+      transform: translateX(-50%) scale(0.2);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .smoke {
+      position: absolute;
+      top: -24px;
+      left: 50%;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: rgba(255,247,236,0.5);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .smoke.go {
+      animation: smokeRise 1.6s ease-out forwards;
+    }
+
+    @keyframes smokeRise {
+      0% { opacity: 0.7; transform: translate(-50%, 0) scale(1); }
+      100% { opacity: 0; transform: translate(-30%, -40px) scale(3); }
+    }
+
+    .wish-text {
+      min-height: 22px;
+      font-size: 14px;
+      color: var(--teal);
+      font-weight: 500;
+      margin-top: 4px;
+    }
+
+    /* --------- Scene 3: cake cutting --------- */
+    .cut-wrap {
+      position: relative;
+      width: 210px;
+      height: 210px;
+      margin: 8px 0 6px;
+    }
+
+    .cake-round {
+      width: 210px;
+      height: 210px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 50% 42%, #fff 0 0) content-box, conic-gradient(from 0deg, var(--frosting) 0deg 359.9deg, var(--frosting) 360deg);
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset 0 0 10px rgba(255,255,255,0.5);
+    }
+
+    .cake-round::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: repeating-conic-gradient(var(--pink) 0deg 8deg, transparent 8deg 16deg);
+      opacity: 0.35;
+    }
+
+    .slice-out {
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      top: 50%;
+      left: 50%;
+      background: linear-gradient(135deg, var(--frosting), var(--pink));
+      clip-path: polygon(50% 50%, 100% 0, 100% 100%);
+      transform: translate(-50%, -50%) scale(0.001);
+      transition: transform 0.6s cubic-bezier(.2,.8,.3,1.2), left 0.6s ease, top 0.6s ease;
+      border-radius: 4px;
+    }
+
+    .slice-out.slid {
+      transform: translate(60px, 40px) scale(1) rotate(12deg);
+    }
+
+    /* --------- Scene 4: flowers --------- */
+    .field {
+      position: relative;
+      width: 100%;
+      height: 120px;
+      margin: 8px 0 4px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 14px;
+    }
+
+    .flower {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transform: scale(0);
+      animation: bloom 0.6s cubic-bezier(.2,.8,.3,1.3) forwards;
+    }
+
+    .flower:nth-child(1) { animation-delay: 0.15s; }
+    .flower:nth-child(2) { animation-delay: 0.25s; }
+    .flower:nth-child(3) { animation-delay: 0.45s; }
+    .flower:nth-child(4) { animation-delay: 0.55s; }
+    .flower:nth-child(5) { animation-delay: 0.75s; }
+
+    @keyframes bloom {
+      to { transform: scale(1); }
+    }
+
+    .petals {
+      position: relative;
+      width: 34px;
+      height: 34px;
+    }
+
+    .petal {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border-radius: 50% 50% 50% 0;
+      top: 9px;
+      left: 9px;
+    }
+
+    .petal:nth-child(1) { transform: rotate(0deg) translate(10px) rotate(0deg); }
+    .petal:nth-child(2) { transform: rotate(72deg) translate(10px) rotate(-72deg); }
+    .petal:nth-child(3) { transform: rotate(144deg) translate(10px) rotate(-144deg); }
+    .petal:nth-child(4) { transform: rotate(216deg) translate(10px) rotate(-216deg); }
+    .petal:nth-child(5) { transform: rotate(288deg) translate(10px) rotate(-288deg); }
+
+    .center {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--gold);
+      top: 11px;
+      left: 11px;
+    }
+
+    .stem {
+      width: 3px;
+      height: 46px;
+      background: var(--teal);
+      border-radius: 2px;
+    }
+
+    .confetti-piece {
+      position: fixed;
+      top: -20px;
+      z-index: 5;
+      pointer-events: none;
+      border-radius: 2px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background layers -->
+  <div class="bg-photos-container" id="bgPhotosContainer"></div>
+  <div class="bg-quotes-container" id="bgQuotesContainer"></div>
+
+  <div class="streamers" id="streamers"></div>
+
+  <div class="stage">
+    <div class="card">
+      
+      <div class="scene active" data-scene="1">
+        <div class="eyebrow">A small celebration</div>
+        <h1>Happy <span>Birthday</span></h1>
+        <h1>Sidhvi Anna</h1>
+        <div class="sub">Wishing you a day that feels exactly as good as it should — and a year ahead that's even better.</div>
+        <div class="row">
+          <button class="btn" id="celebrateBtn">Celebrate 🎉</button>
+          <button class="btn ghost" onclick="goTo(2)">Next →</button>
+        </div>
+        <div class="dots" id="dots"></div>
+      </div>
+
+      <div class="scene" data-scene="2">
+        <div class="eyebrow">Make a wish</div>
+        <h1 style="font-size:clamp(26px,5vw,34px)">Light the candles</h1>
+        <div class="candle-cake">
+          <div class="tier top"></div>
+          <div class="tier bottom"></div>
+          <div class="candles-wrap" id="candlesWrap"></div>
+        </div>
+        <div class="wish-text" id="wishText">Click below to blow them out.</div>
+        <div class="row">
+          <button class="btn ghost" onclick="goTo(1)">← Back</button>
+          <button class="btn" id="blowBtn">Blow out 💨</button>
+          <button class="btn ghost" id="toCutBtn" style="display:none" onclick="goTo(3)">Next →</button>
+        </div>
+        <div class="dots"></div>
+      </div>
+
+      <div class="scene" data-scene="3">
+        <div class="eyebrow">The best part</div>
+        <h1 style="font-size:clamp(26px,5vw,34px)">Cut the cake</h1>
+        <div class="cut-wrap">
+          <div class="cake-round" id="cakeRound"></div>
+          <div class="slice-out" id="sliceOut"></div>
+        </div>
+        <div class="wish-text" id="cutText">Tap the knife to cut a slice.</div>
+        <div class="row">
+          <button class="btn ghost" onclick="goTo(2)">← Back</button>
+          <button class="btn knife-btn" id="cutBtn">🔪 Cut a slice</button>
+          <button class="btn ghost" id="toFlowersBtn" style="display:none" onclick="goTo(4)">Next →</button>
+        </div>
+        <div class="dots"></div>
+      </div>
+
+      <div class="scene" data-scene="4">
+        <div class="eyebrow">One more thing</div>
+        <h1 style="font-size:clamp(26px,5vw,34px)">Flowers for you 💐</h1>
+        <div class="field" id="field"></div>
+        <div class="sub">However you're celebrating — hope it's full of good food, good people, and a little bit of magic.</div>
+        <div class="row">
+          <button class="btn ghost" onclick="goTo(3)">← Back</button>
+          <button class="btn" id="finalBtn">Happy Birthday! 🎈</button>
+        </div>
+        <div class="dots"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    /* --------- MY PHOTOS ARRAY --------- */
+    const myPhotos = [
+      "2J2A7207.jpg",
+      "2J2A7217.jpg",
+      "2J2A7222.jpg",
+      "2J2A7309.jpg",
+      "2J2A7892.jpg",
+      "2J2A8036.jpg",
+      "2J2A8072.jpg", 
+      "2J2A8069.jpg",
+      "2J2A8086.jpg"
+    ];
+
+    /* --------- Moving Text Quotes Engine --------- */
+    const quotes = [
+      "They say you don't choose your family, but if I could choose a brother today, I’d still pick you.",
+      "We don't always say it, but I really value the bond between us. Happy birthday to a great brother.",
+      "Happy Birthday to the brother I'm genuinely lucky to have.",
+      "To more memories, more laughs, and many more birthdays.",
+      "Happy Birthday, Anna. Thanks for being someone I can always look up to.",
+      "Wishing you all the happiness you deserve. Happy Birthday, Anna.",
+      "Some bonds just find their way back. Happy Birthday, Anna. 🤍"
+    ];
+
+    const bgQuotesContainer = document.getElementById('bgQuotesContainer');
+    let lastSide = 0; 
+
+    function spawnQuote() {
+      const text = quotes[Math.floor(Math.random() * quotes.length)];
+      const quoteEl = document.createElement('div');
+      quoteEl.className = 'floating-quote';
+      quoteEl.textContent = text;
+      
+      let leftPosition;
+      if (lastSide === 0) {
+        leftPosition = Math.random() * 8; 
+        lastSide = 1;
+      } else {
+        leftPosition = 78 + Math.random() * 6; 
+        lastSide = 0;
+      }
+      quoteEl.style.left = leftPosition + 'vw';
+      
+      const duration = 14 + Math.random() * 6; 
+      const delay = Math.random() * 2; 
+      const randomRotation = (Math.random() * 10 - 5) + 'deg'; 
+      
+      quoteEl.style.setProperty('--dur', duration + 's');
+      quoteEl.style.setProperty('--delay', delay + 's');
+      quoteEl.style.setProperty('--rot', randomRotation);
+      
+      bgQuotesContainer.appendChild(quoteEl);
+      
+      setTimeout(() => {
+        quoteEl.remove();
+      }, (duration + delay) * 1000 + 500);
+    }
+
+    for (let i = 0; i < 4; i++) {
+      setTimeout(() => spawnQuote(), i * 3500);
+    }
+    setInterval(spawnQuote, 6000);
+
+    /* --------- Background Photo Grid Coordinates Engine --------- */
+    const bgPhotosContainer = document.getElementById('bgPhotosContainer');
+
+    function initializePhotos() {
+      const exactPositions = [
+        { top: '6vh',   left: '4vw',  isHorizontal: false }, 
+        { top: '6vh',   left: '44vw', isHorizontal: false }, 
+        { top: '6vh',   left: '84vw', isHorizontal: false }, 
+        
+        { top: '38vh',  left: '3vw',  isHorizontal: false }, 
+        { top: '38vh',  left: '86vw', isHorizontal: false }, 
+        
+        { top: '72vh',  left: '4vw',  isHorizontal: false }, 
+        { top: '87vh',  left: '41vw', isHorizontal: true }, 
+        { top: '72vh',  left: '84vw', isHorizontal: false }, 
+        
+        { top: '48vh',  left: '12vw', isHorizontal: false }
+      ];
+
+      myPhotos.forEach((src, index) => {
+        const pos = exactPositions[index % exactPositions.length];
+        
+        const img = document.createElement('img');
+        img.className = 'drifting-photo' + (pos.isHorizontal ? ' horizontal-slot' : '');
+        img.src = src;
+        
+        const scatterTop = parseFloat(pos.top) + (Math.random() * 2 - 1);
+        const scatterLeft = parseFloat(pos.left) + (Math.random() * 2 - 1);
+        
+        img.style.top = scatterTop + 'vh';
+        img.style.left = scatterLeft + 'vw';
+
+        const duration = 15 + Math.random() * 8; 
+        const delay = Math.random() * -12; 
+        const rot = (Math.random() * 14 - 7) + 'deg';
+
+        img.style.setProperty('--dur', duration + 's');
+        img.style.setProperty('--delay', delay + 's');
+        img.style.setProperty('--rot', rot);
+
+        bgPhotosContainer.appendChild(img);
+      });
+    }
+    
+    initializePhotos();
+
+    /* --------- streamers --------- */
+    const streamerColors = ['#FF5FA2', '#FFB627', '#1FBFA8', '#6E3ACB'];
+    const streamerContainer = document.getElementById('streamers');
+    for (let i = 0; i < 12; i++) {
+      const s = document.createElement('div');
+      s.className = 'streamer';
+      s.style.left = (i / 9 * 100) + '%';
+      s.style.background = streamerColors[i % streamerColors.length];
+      s.style.animationDelay = (i * 0.3) + 's';
+      streamerContainer.appendChild(s);
+    }
+
+    /* --------- confetti --------- */
+    function burstConfetti(n = 80) {
+      const colors = ['#FF5FA2', '#FFB627', '#1FBFA8', '#6E3ACB', '#FFF7EC'];
+      for (let i = 0; i < n; i++) {
+        const c = document.createElement('div');
+        c.className = 'confetti-piece';
+        const size = 6 + Math.random() * 6;
+        c.style.width = size + 'px';
+        c.style.height = size * 0.4 + 'px';
+        c.style.background = colors[Math.floor(Math.random() * colors.length)];
+        c.style.left = Math.random() * 100 + 'vw';
+        const duration = 2.5 + Math.random() * 2;
+        const rotation = Math.random() * 720;
+        c.style.transition = `transform ${duration}s cubic-bezier(0.2,0.6,0.4,1), top ${duration}s cubic-bezier(0.2,0.6,0.4,1), opacity ${duration}s ease`;
+        document.body.appendChild(c);
+
+        requestAnimationFrame(() => {
+          c.style.top = (100 + Math.random() * 10) + 'vh';
+          c.style.transform = `rotate(${rotation}deg)`;
+          c.style.opacity = '0.9';
+        });
+
+        setTimeout(() => c.remove(), duration * 1000 + 200);
+      }
+    }
+
+    document.getElementById('celebrateBtn').addEventListener('click', () => burstConfetti());
+    document.getElementById('finalBtn').addEventListener('click', () => burstConfetti(120));
+    window.addEventListener('load', () => setTimeout(() => burstConfetti(), 400));
+
+    /* --------- scene navigation --------- */
+    const totalScenes = 4;
+    const dotsContainers = document.querySelectorAll('.dots');
+
+    function renderDots(active) {
+      dotsContainers.forEach(dc => {
+        dc.innerHTML = '';
+        for (let i = 1; i <= totalScenes; i++) {
+          const d = document.createElement('div');
+          d.className = 'dot' + (i === active ? ' on' : '');
+          dc.appendChild(d);
+        }
+      });
+    }
+
+    function goTo(n) {
+      document.querySelectorAll('.scene').forEach(s => {
+        s.classList.toggle('active', Number(s.dataset.scene) === n);
+      });
+      renderDots(n);
+    }
+
+    renderDots(1);
+
+    /* --------- candles --------- */
+    const candlesWrap = document.getElementById('candlesWrap');
+    const candleCount = 5;
+
+    for (let i = 0; i < candleCount; i++) {
+      const candle = document.createElement('div');
+      candle.className = 'candle';
+      const flame = document.createElement('div');
+      flame.className = 'flame';
+      flame.style.animationDelay = (i * 0.15) + 's';
+      const smoke = document.createElement('div');
+      smoke.className = 'smoke';
+      
+      candle.appendChild(flame);
+      candle.appendChild(smoke);
+      candlesWrap.appendChild(candle);
+    }
+
+    let candlesLit = true;
+    document.getElementById('blowBtn').addEventListener('click', () => {
+      if (!candlesLit) return;
+      candlesLit = false;
+
+      document.querySelectorAll('.flame').forEach((f, i) => {
+        setTimeout(() => {
+          f.classList.add('out');
+          const smoke = f.nextElementSibling;
+          smoke.classList.add('go');
+        }, i * 120);
+      });
+
+      document.getElementById('wishText').textContent = "Wish made ✨ - here's to a wonderful year ahead.";
+      document.getElementById('toCutBtn').style.display = 'inline-block';
+      document.getElementById('blowBtn').disabled = true;
+    });
+
+    /* --------- cake cutting --------- */
+    let sliced = false;
+    document.getElementById('cutBtn').addEventListener('click', () => {
+      if (sliced) return;
+      sliced = true;
+
+      document.getElementById('sliceOut').classList.add('slid');
+      document.getElementById('cutText').textContent = "First slice is yours 🍰";
+      document.getElementById('toFlowersBtn').style.display = 'inline-block';
+      document.getElementById('cutBtn').disabled = true;
+    });
+
+    /* --------- flowers --------- */
+    const flowerColors = [
+      {petal: '#FF5FA2'}, {petal: '#FFB627'}, {petal: '#6E3ACB'}, {petal: '#1FBFA8'}, {petal: '#FFE9C7'}
+    ];
+    
+    const field = document.getElementById('field');
+    
+    flowerColors.forEach(fc => {
+      const flower = document.createElement('div');
+      flower.className = 'flower';
+      
+      const petals = document.createElement('div');
+      petals.className = 'petals';
+      
+      for (let i = 0; i < 5; i++) {
+        const petal = document.createElement('div');
+        petal.className = 'petal';
+        petal.style.background = fc.petal;
+        petals.appendChild(petal);
+      }
+      
+      const center = document.createElement('div');
+      center.className = 'center';
+      petals.appendChild(center);
+      
+      const stem = document.createElement('div');
+      stem.className = 'stem';
+      
+      flower.appendChild(petals);
+      flower.appendChild(stem);
+      field.appendChild(flower);
+    });
+  </script>
+</body>
+</html>
