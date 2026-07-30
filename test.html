@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Happy Birthday Yuktha</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;400;600;900&family=Space+Grotesk:wght@400;500;700&display=swap');
+
+    :root {
+      --ink: #241933;
+      --paper: #FFF7EC;
+      --violet: #6E3ACB;
+      --pink: #FF5FA2;
+      --gold: #FFB627;
+      --teal: #1FBFA8;
+      --cream: #FFE9C7;
+      --frosting: #FFD8E8;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--paper);
+      font-family: 'Space Grotesk', sans-serif;
+      overflow-x: hidden;
+      position: relative;
+      padding: 24px;
+    }
+
+    /* Paper Texture Overlay */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.05;
+      pointer-events: none;
+      z-index: 99;
+      background-image: url("https://www.transparenttextures.com/patterns/cream-paper.png");
+    }
+
+    /* Background Containers */
+    .bg-quotes-container, .bg-photos-container {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .bg-photos-container { z-index: 0; }
+    .bg-quotes-container { z-index: 1; }
+
+    /* --- Floating Quotes --- */
+    .floating-quote {
+      position: absolute;
+      font-family: 'Fraunces', serif;
+      font-weight: 500;
+      font-style: italic;
+      font-size: clamp(14px, 2vw, 17px);
+      color: var(--ink);
+      opacity: 0;
+      white-space: normal;
+      max-width: 15vw;
+      line-height: 1.4;
+      transform-origin: center;
+      animation: floatUpWord var(--dur) linear var(--delay) forwards;
+    }
+
+    @keyframes floatUpWord {
+      0% { transform: translateY(105vh) rotate(var(--rot)); opacity: 0; }
+      10% { opacity: 0.4; }
+      85% { opacity: 0.4; }
+      100% { transform: translateY(-25vh) rotate(var(--rot)); opacity: 0; }
+    }
+
+    /* --- Drifting Background Photos --- */
+    .drifting-photo {
+      position: absolute;
+      width: clamp(110px, 13vw, 150px);
+      height: auto;
+      border-radius: 4px;
+      border: 6px solid #fff;
+      box-shadow: 
+        0 4px 10px rgba(36, 25, 51, 0.06),
+        0 12px 25px rgba(36, 25, 51, 0.1),
+        0 30px 50px rgba(110, 58, 203, 0.05);
+      opacity: 0.85;
+      object-fit: cover;
+      transform-origin: center;
+      animation: floatingDrift var(--dur) cubic-bezier(0.25, 1, 0.5, 1) var(--delay) infinite alternate;
+    }
+
+    .drifting-photo.horizontal-slot {
+      width: clamp(165px, 20vw, 220px) !important;
+      aspect-ratio: 4 / 3 !important;
+      height: auto !important;
+    }
+
+    @keyframes floatingDrift {
+      0% { transform: translate(0, 0) rotate(var(--rot)); }
+      100% { transform: translate(var(--driftX), var(--driftY)) rotate(calc(var(--rot) + var(--driftR))); }
+    }
+
+    /* Streamers Layer */
+    .streamers {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .streamer {
+      position: absolute;
+      top: -10%;
+      width: 8px;
+      height: 120%;
+      transform-origin: top center;
+      animation: sway 7s ease-in-out infinite;
+      border-radius: 6px;
+      opacity: 0.35;
+    }
+
+    @keyframes sway {
+      0%, 100% { transform: rotate(-5deg); }
+      50% { transform: rotate(5deg); }
+    }
+
+    .stage {
+      position: relative;
+      z-index: 3;
+      width: min(540px, 100%);
+    }
+
+    /* Card Containers */
+    .card {
+      background: var(--ink);
+      color: var(--paper);
+      width: 100%;
+      padding: 50px 36px 36px;
+      border-radius: 32px;
+      text-align: center;
+      box-shadow: 
+        0 10px 30px -10px rgba(36, 25, 51, 0.2),
+        0 40px 80px -20px rgba(36, 25, 51, 0.6),
+        0 60px 120px -10px rgba(110, 58, 203, 0.15);
+      border: 1px solid rgba(255,247,236,0.06);
+      position: relative;
+      min-height: 480px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .scene {
+      display: none;
+      width: 100%;
+      flex-direction: column;
+      align-items: center;
+      animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .scene.active { display: flex; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+      margin-bottom: 16px;
+      opacity: 0.9;
+    }
+
+    .h1-light {
+      font-family: 'Fraunces', serif;
+      font-weight: 300;
+      font-size: clamp(28px, 5vw, 40px);
+      line-height: 1.1;
+      margin: 0;
+    }
+
+    .h1-italic {
+      font-family: 'Fraunces', serif;
+      color: var(--pink);
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    .h1-bold {
+      font-family: 'Fraunces', serif;
+      font-weight: 900;
+      font-size: clamp(38px, 7vw, 58px);
+      line-height: 0.9;
+      margin: 4px 0 16px;
+      letter-spacing: -0.02em;
+    }
+
+    .sub {
+      font-size: 14px;
+      color: rgba(255,247,236,0.65);
+      max-width: 360px;
+      margin: 0 auto 24px;
+      line-height: 1.6;
+      font-weight: 400;
+    }
+
+    .btn {
+      background: var(--pink);
+      color: var(--ink);
+      border: none;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      padding: 14px 32px;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s ease;
+    }
+
+    .btn:hover {
+      background: var(--gold);
+      transform: translateY(-3px);
+    }
+
+    .btn.ghost {
+      background: transparent;
+      color: var(--paper);
+      border: 1px solid rgba(255,247,236,0.25);
+    }
+
+    .btn.ghost:hover {
+      background: rgba(255,247,236,0.06);
+      border-color: rgba(255,247,236,0.5);
+      transform: translateY(-2px);
+    }
+
+    .btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    .row {
+      display: flex;
+      gap: 14px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .dots {
+      display: flex;
+      gap: 10px;
+      margin-top: 28px;
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255,247,236,0.15);
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .dot.on {
+      background: var(--pink);
+      transform: scale(1.3);
+    }
+
+    /* --------- Scene 2: Candles & Cake --------- */
+    .candle-cake {
+      position: relative;
+      width: 220px;
+      height: 150px;
+      margin: 10px 0 12px;
+    }
+
+    .tier.bottom {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 8px;
+      width: 210px;
+      height: 65px;
+      bottom: 0;
+      background: linear-gradient(180deg, var(--frosting), var(--pink));
+    }
+
+    .tier.top {
+      width: 150px;
+      height: 50px;
+      bottom: 58px;
+      background: linear-gradient(180deg, #fff, var(--frosting));
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 8px;
+    }
+
+    .candles-wrap {
+      position: absolute;
+      bottom: 102px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 20px;
+    }
+
+    .candle {
+      width: 8px;
+      height: 36px;
+      background: linear-gradient(180deg, var(--gold), #fff2cf);
+      border-radius: 2px;
+      position: relative;
+    }
+
+    .flame {
+      position: absolute;
+      top: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 10px;
+      height: 15px;
+      border-radius: 60% 60% 40% 40% / 80% 80% 40% 40%;
+      background: radial-gradient(circle at 50% 70%, #fff6c8, var(--gold) 55%, #ff8a3d 90%);
+      animation: flicker 1.2s ease-in-out infinite;
+      transform-origin: bottom center;
+    }
+
+    @keyframes flicker {
+      0%, 100% { transform: translateX(-50%) scale(1) rotate(-3deg); }
+      50% { transform: translateX(-50%) scale(1.1) rotate(4deg); }
+    }
+
+    .flame.out {
+      animation: none;
+      opacity: 0;
+      transform: translateX(-50%) scale(0.1);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .smoke {
+      position: absolute;
+      top: -22px;
+      left: 50%;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: rgba(255,247,236,0.4);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .smoke.go { animation: smokeRise 1.4s ease-out forwards; }
+
+    @keyframes smokeRise {
+      0% { opacity: 0.6; transform: translate(-50%, 0) scale(1); }
+      100% { opacity: 0; transform: translate(-20%, -35px) scale(2.5); }
+    }
+
+    .wish-text {
+      min-height: 22px;
+      font-size: 14px;
+      color: var(--teal);
+      font-weight: 500;
+      margin-top: 6px;
+      letter-spacing: 0.02em;
+    }
+
+    /* --------- Scene 3: Cake Cutting --------- */
+    .cut-wrap {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      margin: 12px 0 10px;
+    }
+
+    .cake-round {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 50% 42%, #fff 0 0) content-box, conic-gradient(from 0deg, var(--frosting) 0deg 359.9deg, var(--frosting) 360deg);
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset 0 0 10px rgba(255,255,255,0.4);
+    }
+
+    .cake-round::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: repeating-conic-gradient(var(--pink) 0deg 8deg, transparent 8deg 16deg);
+      opacity: 0.3;
+    }
+
+    .slice-out {
+      position: absolute;
+      width: 75px;
+      height: 75px;
+      top: 50%;
+      left: 50%;
+      background: linear-gradient(135deg, var(--frosting), var(--pink));
+      clip-path: polygon(50% 50%, 100% 0, 100% 100%);
+      transform: translate(-50%, -50%) scale(0.001);
+      transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), left 0.6s ease, top 0.6s ease;
+      border-radius: 4px;
+    }
+
+    .slice-out.slid {
+      transform: translate(55px, 35px) scale(1) rotate(15deg);
+    }
+
+    /* --------- Scene 4: Flower Blooming Field --------- */
+    .field {
+      position: relative;
+      width: 100%;
+      height: 120px;
+      margin: 12px 0 8px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .flower {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transform: scale(0);
+      animation: bloom 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    .flower:nth-child(1) { animation-delay: 0.1s; }
+    .flower:nth-child(2) { animation-delay: 0.25s; }
+    .flower:nth-child(3) { animation-delay: 0.4s; }
+    .flower:nth-child(4) { animation-delay: 0.55s; }
+    .flower:nth-child(5) { animation-delay: 0.7s; }
+
+    @keyframes bloom { to { transform: scale(1); } }
+
+    .petals { position: relative; width: 32px; height: 32px; }
+    .petal {
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      border-radius: 50% 50% 50% 0;
+      top: 8px; left: 8px;
+    }
+
+    .petal:nth-child(1) { transform: rotate(0deg) translate(9px) rotate(0deg); }
+    .petal:nth-child(2) { transform: rotate(72deg) translate(9px) rotate(-72deg); }
+    .petal:nth-child(3) { transform: rotate(144deg) translate(9px) rotate(-144deg); }
+    .petal:nth-child(4) { transform: rotate(216deg) translate(9px) rotate(-216deg); }
+    .petal:nth-child(5) { transform: rotate(288deg) translate(9px) rotate(-288deg); }
+
+    .center {
+      position: absolute;
+      width: 11px; height: 11px;
+      border-radius: 50%;
+      background: var(--gold);
+      top: 10px; left: 10px;
+    }
+
+    .stem {
+      width: 3px; height: 48px;
+      background: var(--teal);
+      border-radius: 2px;
+    }
+
+    /* --------- Scene 5: Custom Wish Card Layout --------- */
+    .card-h1 {
+      font-family: 'Fraunces', serif;
+      font-weight: 900;
+      font-size: clamp(32px, 6vw, 44px);
+      color: var(--pink);
+      margin: 0 0 16px;
+      line-height: 1.1;
+    }
+
+    .card-photo {
+      width: 100%;
+      max-width: 240px;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 12px;
+      border: 5px solid #fff;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+      margin-bottom: 16px;
+    }
+
+    .card-subtext {
+      font-size: 15px;
+      color: rgba(255,247,236,0.75);
+      margin: 0 0 10px;
+      font-weight: 400;
+    }
+
+    .confetti-piece {
+      position: fixed;
+      top: -20px;
+      z-index: 5;
+      pointer-events: none;
+      border-radius: 1px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-photos-container" id="bgPhotosContainer"></div>
+  <div class="bg-quotes-container" id="bgQuotesContainer"></div>
+  <div class="streamers" id="streamers"></div>
+
+  <div class="stage">
+    <div class="card">
+      
+      <!-- Stage 1 -->
+      <div class="scene active" data-scene="1">
+        <div class="eyebrow">A small celebration</div>
+        <div class="h1-light">Happy <span class="h1-italic">Birthday</span></div>
+        <div class="h1-bold">Sidhvi</div>
+        <div class="sub">Wishing you a day that feels exactly as good as it should — and a year ahead that's even better.</div>
+        <div class="row">
+          <button class="btn" id="celebrateBtn">Celebrate 🎉</button>
+          <button class="btn ghost" onclick="goTo(2)">Next <span>➔</span></button>
+        </div>
+        <div class="dots"></div>
+      </div>
+
+      <!-- Stage 2 -->
+      <div class="scene" data-scene="2">
+        <div class="eyebrow">Make a wish</div>
+        <div class="h1-light" style="font-size:28px; margin-bottom:8px;">Light the candles</div>
+        <div class="candle-cake">
+          <div class="tier top"></div>
+          <div class="tier bottom"></div>
+          <div class="candles-wrap" id="candlesWrap"></div>
+        </div>
+        <div class="wish-text" id="wishText">Click below to blow them out.</div>
+        <div class="row">
+          <button class="btn ghost" onclick="goTo(1)"><span>➔</span> Back</button>
+          <button class="btn" id="blowBtn">Blow out 💨</button>
+          <button class="btn ghost" id="toCutBtn" style="display:none" onclick="goTo(3)">Next <span>➔</span></button>
+        </div>
+        <div class="dots"></div>
+      </div>
+
+      <!-- Stage 3 -->
+      <div class="scene" data-scene="3">
+        <div class="eyebrow">The best part</div>
+        <div class="h1-light" style="font-size:28px; margin-bottom:8px;">Cut the cake</div>
+        <div class="cut-wrap">
+          <div class="cake-round" id="cakeRound"></div>
+          <div class="slice-out" id="sliceOut"></div>
+        </div>
+        <div class="wish-text" id="cutText">Tap the knife to cut a slice.</div>
+        <div class="row">
+          <button class="btn ghost" onclick="goTo(2)"><span>➔</span> Back</button>
+          <button class="btn knife-btn" id="cutBtn">🔪 Cut a slice</button>
+          <button class="btn ghost" id="toFlowersBtn" style="display:none" onclick="goTo(4)">Next <span>➔</span></button>
+        </div>
+        <div class="dots"></div>
+      </div>
+
+      <!-- Stage 4: Flowers Scene -->
+      <div class="scene" data-scene="4">
+        <div class="eyebrow">One more thing</div>
+        <div class="h1-light" style="font-size:30px; margin-bottom:4px;">Flowers for you 💐</div>
+        <div class="field" id="field"></div>
+        <div class="sub">However you're celebrating — hope it's full of good food, good people, and a little bit of magic.</div>
+        <div class="row">
+          <button class="btn ghost" onclick="goTo(3)"><span>➔</span> Back</button>
+          <button class="btn" onclick="goTo(5)">Next <span>➔</span></button>
+        </div>
+        <div class="dots"></div>
+      </div>
+
+      <!-- Stage 5: Final Special Wish Scene -->
+      <div class="scene" data-scene="5">
+        <div class="eyebrow">From the heart</div>
+        <h1 class="card-h1">Happiest Birthdayyy Annaa</h1>
+        <img src="2J2A8086.jpg" alt="Anna Celebration" class="card-photo">
+        <p class="card-subtext">May you get all you wish for</p>
+        <div class="row" style="margin-top: 10px;">
+          <button class="btn ghost" onclick="goTo(4)"><span>➔</span> Back</button>
+          <button class="btn" id="finalBtn">Happy Birthday! 🎈</button>
+        </div>
+        <div class="dots"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const myPhotos = [
+      "2J2A7207.jpg",
+      "2J2A7217.jpg",
+      "2J2A7222.jpg",
+      "2J2A7309.jpg",
+      "2J2A7892.jpg",
+      "2J2A8036.jpg",
+      "2J2A8072.jpg", 
+      "2J2A8069.jpg",
+      "2J2A8086.jpg"
+    ];
+
+    const quotes = [
+      "They say you don't choose your family, but if I could choose a brother today, I’d still pick you. Glad you were born, man.",
+      "We don't always say it, but I really value the bond between us. Happy birthday to a great brother.",
+      "Happy Birthday to the brother I'm genuinely lucky to have.",
+      "To more memories, more laughs, and many more birthdays.",
+      "Happy Birthday, Anna. Thanks for being someone I can always look up to.",
+      "Wishing you all the happiness you deserve. Happy Birthday, Anna.",
+      "Some bonds just find their way back. Happy Birthday, Anna. 🤍"
+    ];
+
+    /* --------- Typography Quotes Engine --------- */
+    const bgQuotesContainer = document.getElementById('bgQuotesContainer');
+    let lastSide = 0; 
+
+    function spawnQuote() {
+      const text = quotes[Math.floor(Math.random() * quotes.length)];
+      const quoteEl = document.createElement('div');
+      quoteEl.className = 'floating-quote';
+      quoteEl.textContent = text;
+      
+      let leftPosition;
+      if (lastSide === 0) {
+        leftPosition = Math.random() * 7; 
+        lastSide = 1;
+      } else {
+        leftPosition = 79 + Math.random() * 5; 
+        lastSide = 0;
+      }
+      quoteEl.style.left = leftPosition + 'vw';
+      
+      const duration = 16 + Math.random() * 5; 
+      const delay = Math.random() * 1.5; 
+      const randomRotation = (Math.random() * 10 - 5) + 'deg'; 
+      
+      quoteEl.style.setProperty('--dur', duration + 's');
+      quoteEl.style.setProperty('--delay', delay + 's');
+      quoteEl.style.setProperty('--rot', randomRotation);
+      
+      bgQuotesContainer.appendChild(quoteEl);
+      
+      setTimeout(() => {
+        quoteEl.remove();
+      }, (duration + delay) * 1000 + 500);
+    }
+
+    for (let i = 0; i < 4; i++) {
+      setTimeout(() => spawnQuote(), i * 3800);
+    }
+    setInterval(spawnQuote, 6500);
+
+    /* --------- Scrapbook Photo Engine --------- */
+    const bgPhotosContainer = document.getElementById('bgPhotosContainer');
+
+    function initializePhotos() {
+      const exactPositions = [
+        { top: '5vh',   left: '3vw',  rot: '-6deg',  driftX: '12px',  driftY: '-15px', driftR: '2deg', isHorizontal: false }, 
+        { top: '4vh',   left: '42vw', rot: '4deg',   driftX: '-8px',  driftY: '-25px', driftR: '-1deg', isHorizontal: false }, 
+        { top: '7vh',   left: '83vw', rot: '8deg',   driftX: '15px',  driftY: '-12px', driftR: '3deg', isHorizontal: false }, 
+        
+        { top: '42vh',  left: '2vw',  rot: '-9deg',  driftX: '20px',  driftY: '-10px', driftR: '-2deg', isHorizontal: false }, 
+        { top: '35vh',  left: '86vw', rot: '5deg',   driftX: '-15px', driftY: '-20px', driftR: '2deg', isHorizontal: false }, 
+        
+        { top: '71vh',  left: '3vw',  rot: '7deg',   driftX: '10px',  driftY: '-30px', driftR: '1deg', isHorizontal: false }, 
+        { top: '87vh',  left: '40vw', rot: '-2deg',  driftX: '-5px',  driftY: '-15px', driftR: '-2deg', isHorizontal: true }, 
+        { top: '69vh',  left: '83vw', rot: '-5deg',  driftX: '-12px', driftY: '-25px', driftR: '3deg', isHorizontal: false }, 
+        
+        { top: '46vh',  left: '11vw', rot: '11deg',  driftX: '18px',  driftY: '-18px', driftR: '-3deg', isHorizontal: false }
+      ];
+
+      myPhotos.forEach((src, index) => {
+        const pos = exactPositions[index % exactPositions.length];
+        
+        const img = document.createElement('img');
+        img.className = 'drifting-photo' + (pos.isHorizontal ? ' horizontal-slot' : '');
+        img.src = src;
+        
+        img.style.top = pos.top;
+        img.style.left = pos.left;
+
+        const duration = 18 + Math.random() * 6; 
+        const delay = Math.random() * -10; 
+
+        img.style.setProperty('--dur', duration + 's');
+        img.style.setProperty('--delay', delay + 's');
+        img.style.setProperty('--rot', pos.rot);
+        img.style.setProperty('--driftX', pos.driftX);
+        img.style.setProperty('--driftY', pos.driftY);
+        img.style.setProperty('--driftR', pos.driftR);
+
+        bgPhotosContainer.appendChild(img);
+      });
+    }
+    
+    initializePhotos();
+
+    /* --------- Streamers Engine --------- */
+    const streamerColors = ['#FF5FA2', '#FFB627', '#1FBFA8', '#6E3ACB'];
+    const streamerContainer = document.getElementById('streamers');
+    for (let i = 0; i < 12; i++) {
+      const s = document.createElement('div');
+      s.className = 'streamer';
+      s.style.left = (i / 9 * 100) + '%';
+      s.style.background = streamerColors[i % streamerColors.length];
+      s.style.animationDelay = (i * 0.4) + 's';
+      streamerContainer.appendChild(s);
+    }
+
+    /* --------- Confetti Burst Engine --------- */
+    function burstConfetti(n = 80) {
+      const colors = ['#FF5FA2', '#FFB627', '#1FBFA8', '#6E3ACB', '#FFF7EC'];
+      for (let i = 0; i < n; i++) {
+        const c = document.createElement('div');
+        c.className = 'confetti-piece';
+        const size = 6 + Math.random() * 6;
+        c.style.width = size + 'px';
+        c.style.height = size * 0.4 + 'px';
+        c.style.background = colors[Math.floor(Math.random() * colors.length)];
+        c.style.left = Math.random() * 100 + 'vw';
+        const duration = 2.6 + Math.random() * 1.8;
+        const rotation = Math.random() * 720;
+        c.style.transition = `transform ${duration}s cubic-bezier(0.1, 0.8, 0.3, 1), top ${duration}s cubic-bezier(0.1, 0.8, 0.3, 1), opacity ${duration}s ease`;
+        document.body.appendChild(c);
+
+        requestAnimationFrame(() => {
+          c.style.top = (100 + Math.random() * 10) + 'vh';
+          c.style.transform = `rotate(${rotation}deg)`;
+          c.style.opacity = '0.9';
+        });
+
+        setTimeout(() => c.remove(), duration * 1000 + 200);
+      }
+    }
+
+    document.getElementById('celebrateBtn').addEventListener('click', () => burstConfetti());
+    document.getElementById('finalBtn').addEventListener('click', () => burstConfetti(120));
+    window.addEventListener('load', () => setTimeout(() => burstConfetti(), 400));
+
+    /* --------- Navigation Controller (5 Scenes Total) --------- */
+    const totalScenes = 5;
+    const dotsContainers = document.querySelectorAll('.dots');
+
+    function renderDots(active) {
+      dotsContainers.forEach(dc => {
+        dc.innerHTML = '';
+        for (let i = 1; i <= totalScenes; i++) {
+          const d = document.createElement('div');
+          d.className = 'dot' + (i === active ? ' on' : '');
+          dc.appendChild(d);
+        }
+      });
+    }
+
+    function goTo(n) {
+      document.querySelectorAll('.scene').forEach(s => {
+        s.classList.toggle('active', Number(s.dataset.scene) === n);
+      });
+      renderDots(n);
+    }
+
+    renderDots(1);
+
+    /* --------- Candles Engine --------- */
+    const candlesWrap = document.getElementById('candlesWrap');
+    const candleCount = 5;
+
+    for (let i = 0; i < candleCount; i++) {
+      const candle = document.createElement('div');
+      candle.className = 'candle';
+      const flame = document.createElement('div');
+      flame.className = 'flame';
+      flame.style.animationDelay = (i * 0.12) + 's';
+      const smoke = document.createElement('div');
+      smoke.className = 'smoke';
+      
+      candle.appendChild(flame);
+      candle.appendChild(smoke);
+      candlesWrap.appendChild(candle);
+    }
+
+    let candlesLit = true;
+    document.getElementById('blowBtn').addEventListener('click', () => {
+      if (!candlesLit) return;
+      candlesLit = false;
+
+      document.querySelectorAll('.flame').forEach((f, i) => {
+        setTimeout(() => {
+          f.classList.add('out');
+          const smoke = f.nextElementSibling;
+          smoke.classList.add('go');
+        }, i * 140);
+      });
+
+      document.getElementById('wishText').textContent = "Wish made ✨ - here's to a wonderful year ahead.";
+      document.getElementById('toCutBtn').style.display = 'inline-block';
+      document.getElementById('blowBtn').disabled = true;
+    });
+
+    /* --------- Cake Cutting Engine --------- */
+    let sliced = false;
+    document.getElementById('cutBtn').addEventListener('click', () => {
+      if (sliced) return;
+      sliced = true;
+
+      document.getElementById('sliceOut').classList.add('slid');
+      document.getElementById('cutText').textContent = "First slice is yours 🍰";
+      document.getElementById('toFlowersBtn').style.display = 'inline-block';
+      document.getElementById('cutBtn').disabled = true;
+    });
+
+    /* --------- Flowers Engine --------- */
+    const flowerColors = [
+      {petal: '#FF5FA2'}, {petal: '#FFB627'}, {petal: '#6E3ACB'}, {petal: '#1FBFA8'}, {petal: '#FFE9C7'}
+    ];
+    
+    const field = document.getElementById('field');
+    
+    flowerColors.forEach(fc => {
+      const flower = document.createElement('div');
+      flower.className = 'flower';
+      
+      const petals = document.createElement('div');
+      petals.className = 'petals';
+      
+      for (let i = 0; i < 5; i++) {
+        const petal = document.createElement('div');
+        petal.className = 'petal';
+        petal.style.background = fc.petal;
+        petals.appendChild(petal);
+      }
+      
+      const center = document.createElement('div');
+      center.className = 'center';
+      petals.appendChild(center);
+      
+      const stem = document.createElement('div');
+      stem.className = 'stem';
+      
+      flower.appendChild(petals);
+      flower.appendChild(stem);
+      field.appendChild(flower);
+    });
+  </script>
+</body>
+</html>
