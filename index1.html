@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Happy Birthday Yuktha</title>
+  <title>Happy Birthday</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;400;600;900&family=Space+Grotesk:wght@400;500;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;600;900&family=Space+Grotesk:wght@400;500;700&display=swap');
 
     :root {
       --ink: #241933;
@@ -38,19 +38,6 @@
       padding: 24px;
     }
 
-    /* 1. Real Paper Texture Overlay */
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      opacity: 0.05;
-      pointer-events: none;
-      z-index: 99;
-      background-image: url("https://www.transparenttextures.com/patterns/cream-paper.png");
-    }
-
     /* Background Containers */
     .bg-quotes-container, .bg-photos-container {
       position: fixed;
@@ -67,17 +54,17 @@
       z-index: 1;
     }
 
-    /* --- Moving Text Quotes (With elegant line wrapping) --- */
+    /* --- System 1: Moving Text Quotes --- */
     .floating-quote {
       position: absolute;
       font-family: 'Fraunces', serif;
-      font-weight: 500;
+      font-weight: 600;
       font-style: italic;
-      font-size: clamp(14px, 2vw, 17px);
+      font-size: clamp(14px, 2.2vw, 18px);
       color: var(--ink);
       opacity: 0;
-      white-space: normal;
-      max-width: 15vw;
+      white-space: normal; /* Changed from nowrap to allow clean wrapping */
+      max-width: 14vw;    /* Restricts width so text stacks vertically on the sides */
       line-height: 1.4;
       transform-origin: center;
       animation: floatUpWord var(--dur) linear var(--delay) forwards;
@@ -89,10 +76,10 @@
         opacity: 0;
       }
       10% {
-        opacity: 0.4;
+        opacity: 0.45;
       }
       85% {
-        opacity: 0.4;
+        opacity: 0.45;
       }
       100% {
         transform: translateY(-25vh) rotate(var(--rot));
@@ -100,40 +87,23 @@
       }
     }
 
-    /* --- Scrapbook Style Drifting Photos --- */
+    /* --- System 2: Lazily Drifting Photos --- */
     .drifting-photo {
       position: absolute;
-      width: clamp(110px, 13vw, 150px);
+      width: clamp(105px, 13vw, 145px);
       height: auto;
-      border-radius: 4px; /* Slightly sharper corners for a polaroid/printed cutout vibe */
-      border: 6px solid #fff;
-      /* 4. Luxury Layered Colored Shadows */
-      box-shadow: 
-        0 4px 10px rgba(36, 25, 51, 0.06),
-        0 12px 25px rgba(36, 25, 51, 0.1),
-        0 30px 50px rgba(110, 58, 203, 0.05);
-      opacity: 0.85;
+      border-radius: 12px;
+      border: 5px solid #fff;
+      box-shadow: 0 8px 24px rgba(36, 25, 51, 0.15);
+      opacity: 0.80;
       object-fit: cover;
       transform-origin: center;
-      animation: floatingDrift var(--dur) cubic-bezier(0.25, 1, 0.5, 1) var(--delay) infinite alternate;
+      animation: floatingDrift var(--dur) ease-in-out var(--delay) infinite alternate;
     }
 
-    /* Washi Tape Effect on selected photos to feel analogue */
-    .drifting-photo::after {
-      content: '';
-      position: absolute;
-      top: -12px;
-      left: 20%;
-      width: 50px;
-      height: 16px;
-      background: rgba(255, 233, 199, 0.6);
-      backdrop-filter: blur(1px);
-      transform: rotate(-4deg);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    }
-
+    /* Forces specific aspect-ratio so the wide layout image displays correctly */
     .drifting-photo.horizontal-slot {
-      width: clamp(165px, 20vw, 220px) !important;
+      width: clamp(155px, 19vw, 210px) !important;
       aspect-ratio: 4 / 3 !important;
       height: auto !important;
     }
@@ -142,12 +112,18 @@
       0% {
         transform: translate(0, 0) rotate(var(--rot));
       }
+      33% {
+        transform: translate(15px, -20px) rotate(calc(var(--rot) + 2deg));
+      }
+      66% {
+        transform: translate(-10px, -35px) rotate(calc(var(--rot) - 2deg));
+      }
       100% {
-        transform: translate(var(--driftX), var(--driftY)) rotate(calc(var(--rot) + var(--driftR)));
+        transform: translate(8px, -50px) rotate(calc(var(--rot) + 1deg));
       }
     }
 
-    /* Streamers Layer */
+    /* streamer signature */
     .streamers {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -159,41 +135,36 @@
     .streamer {
       position: absolute;
       top: -10%;
-      width: 8px;
+      width: 10px;
       height: 120%;
       transform-origin: top center;
-      animation: sway 7s ease-in-out infinite;
+      animation: sway 6s ease-in-out infinite;
       border-radius: 6px;
-      opacity: 0.35;
+      opacity: 0.4;
     }
 
     @keyframes sway {
-      0%, 100% { transform: rotate(-5deg); }
-      50% { transform: rotate(5deg); }
+      0%, 100% { transform: rotate(-6deg); }
+      50% { transform: rotate(6deg); }
     }
 
     .stage {
       position: relative;
       z-index: 3;
-      width: min(540px, 100%);
+      width: min(560px, 100%);
     }
 
-    /* Main Editorial Card Container */
     .card {
       background: var(--ink);
       color: var(--paper);
       width: 100%;
-      padding: 60px 44px 44px;
-      border-radius: 32px;
+      padding: 52px 40px 40px;
+      border-radius: 28px;
       text-align: center;
-      /* Soft premium viewport drop shadow */
-      box-shadow: 
-        0 10px 30px -10px rgba(36, 25, 51, 0.2),
-        0 40px 80px -20px rgba(36, 25, 51, 0.6),
-        0 60px 120px -10px rgba(110, 58, 203, 0.15);
-      border: 1px solid rgba(255,247,236,0.06);
+      box-shadow: 0 30px 60px -20px rgba(36,25,51,0.5);
+      border: 3px solid rgba(255,247,236,0.08);
       position: relative;
-      min-height: 500px;
+      min-height: 480px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -205,7 +176,7 @@
       width: 100%;
       flex-direction: column;
       align-items: center;
-      animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+      animation: fadeUp 0.5s ease both;
     }
 
     .scene.active {
@@ -213,55 +184,41 @@
     }
 
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
+      from { opacity: 0; transform: translateY(16px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
     .eyebrow {
-      font-size: 11px;
-      letter-spacing: 0.35em;
+      font-size: 13px;
+      letter-spacing: 0.3em;
       text-transform: uppercase;
       color: var(--gold);
       font-weight: 500;
-      margin-bottom: 20px;
-      opacity: 0.9;
+      margin-bottom: 16px;
     }
 
-    /* Asymmetric Typography Layout */
-    .h1-light {
-      font-family: 'Fraunces', serif;
-      font-weight: 300;
-      font-size: clamp(32px, 6vw, 44px);
-      line-height: 1.1;
-      margin: 0;
-    }
-
-    .h1-italic {
-      font-family: 'Fraunces', serif;
-      color: var(--pink);
-      font-style: italic;
-      font-weight: 400;
-    }
-
-    .h1-bold {
+    h1 {
       font-family: 'Fraunces', serif;
       font-weight: 900;
-      font-size: clamp(42px, 8vw, 64px);
-      line-height: 0.9;
-      margin: 4px 0 16px;
-      letter-spacing: -0.02em;
+      font-size: clamp(34px, 7vw, 52px);
+      line-height: 1.04;
+      margin: 0 0 6px;
+    }
+
+    h1 span {
+      color: var(--pink);
+      font-style: italic;
+      font-weight: 600;
     }
 
     .sub {
       font-size: 15px;
-      color: rgba(255,247,236,0.65);
-      max-width: 360px;
-      margin: 0 auto 28px;
-      line-height: 1.6;
-      font-weight: 400;
+      color: rgba(255,247,236,0.7);
+      max-width: 380px;
+      margin: 0 auto 24px;
+      line-height: 1.55;
     }
 
-    /* Handcrafted Custom Buttons */
     .btn {
       background: var(--pink);
       color: var(--ink);
@@ -269,153 +226,151 @@
       font-family: 'Space Grotesk', sans-serif;
       font-weight: 700;
       font-size: 15px;
-      padding: 14px 32px;
+      padding: 13px 30px;
       border-radius: 100px;
       cursor: pointer;
-      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s ease;
+      transition: transform 0.15s ease, background 0.15s ease;
     }
 
     .btn:hover {
       background: var(--gold);
-      transform: translateY(-3px);
+      transform: translateY(-2px);
     }
 
     .btn.ghost {
       background: transparent;
       color: var(--paper);
-      border: 1px solid rgba(255,247,236,0.25);
+      border: 2px solid rgba(255,247,236,0.25);
     }
 
     .btn.ghost:hover {
-      background: rgba(255,247,236,0.06);
-      border-color: rgba(255,247,236,0.5);
-      transform: translateY(-2px);
+      background: rgba(255,247,236,0.08);
+      color: var(--paper);
     }
 
     .btn:disabled {
-      opacity: 0.3;
+      opacity: 0.4;
       cursor: not-allowed;
-      transform: none !important;
+      transform: none;
     }
 
     .row {
       display: flex;
-      gap: 14px;
-      margin-top: 20px;
+      gap: 12px;
+      margin-top: 22px;
       flex-wrap: wrap;
       justify-content: center;
     }
 
     .dots {
       display: flex;
-      gap: 10px;
-      margin-top: 32px;
+      gap: 8px;
+      margin-top: 28px;
     }
 
     .dot {
-      width: 6px;
-      height: 6px;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
-      background: rgba(255,247,236,0.15);
-      transition: background 0.3s, transform 0.3s;
+      background: rgba(255,247,236,0.2);
+      transition: background 0.2s;
     }
 
     .dot.on {
       background: var(--pink);
-      transform: scale(1.3);
     }
 
-    /* --------- Candles & Cake Scene --------- */
+    /* --------- Scene 2: candles / wish --------- */
     .candle-cake {
       position: relative;
       width: 220px;
       height: 150px;
-      margin: 10px 0 12px;
+      margin: 10px 0 8px;
     }
 
     .tier.bottom {
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
-      border-radius: 8px;
-      width: 210px;
-      height: 65px;
+      border-radius: 10px;
+      width: 220px;
+      height: 70px;
       bottom: 0;
       background: linear-gradient(180deg, var(--frosting), var(--pink));
     }
 
     .tier.top {
-      width: 150px;
-      height: 50px;
-      bottom: 58px;
+      width: 160px;
+      height: 55px;
+      bottom: 62px;
       background: linear-gradient(180deg, #fff, var(--frosting));
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
-      border-radius: 8px;
+      border-radius: 10px;
     }
 
     .candles-wrap {
       position: absolute;
-      bottom: 102px;
+      bottom: 112px;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
-      gap: 20px;
+      gap: 22px;
     }
 
     .candle {
       width: 8px;
-      height: 36px;
+      height: 38px;
       background: linear-gradient(180deg, var(--gold), #fff2cf);
-      border-radius: 2px;
+      border-radius: 3px;
       position: relative;
     }
 
     .flame {
       position: absolute;
-      top: -18px;
+      top: -20px;
       left: 50%;
       transform: translateX(-50%);
-      width: 10px;
-      height: 15px;
+      width: 11px;
+      height: 16px;
       border-radius: 60% 60% 40% 40% / 80% 80% 40% 40%;
       background: radial-gradient(circle at 50% 70%, #fff6c8, var(--gold) 55%, #ff8a3d 90%);
-      animation: flicker 1.2s ease-in-out infinite;
+      animation: flicker 1.4s ease-in-out infinite;
       transform-origin: bottom center;
     }
 
     @keyframes flicker {
-      0%, 100% { transform: translateX(-50%) scale(1) rotate(-3deg); }
-      50% { transform: translateX(-50%) scale(1.1) rotate(4deg); }
+      0%, 100% { transform: translateX(-50%) scale(1) rotate(-2deg); }
+      50% { transform: translateX(-50%) scale(1.12) rotate(3deg); }
     }
 
     .flame.out {
       animation: none;
       opacity: 0;
-      transform: translateX(-50%) scale(0.1);
-      transition: opacity 0.3s ease, transform 0.3s ease;
+      transform: translateX(-50%) scale(0.2);
+      transition: opacity 0.4s ease, transform 0.4s ease;
     }
 
     .smoke {
       position: absolute;
-      top: -22px;
+      top: -24px;
       left: 50%;
       width: 4px;
       height: 4px;
       border-radius: 50%;
-      background: rgba(255,247,236,0.4);
+      background: rgba(255,247,236,0.5);
       opacity: 0;
       pointer-events: none;
     }
 
     .smoke.go {
-      animation: smokeRise 1.4s ease-out forwards;
+      animation: smokeRise 1.6s ease-out forwards;
     }
 
     @keyframes smokeRise {
-      0% { opacity: 0.6; transform: translate(-50%, 0) scale(1); }
-      100% { opacity: 0; transform: translate(-20%, -35px) scale(2.5); }
+      0% { opacity: 0.7; transform: translate(-50%, 0) scale(1); }
+      100% { opacity: 0; transform: translate(-30%, -40px) scale(3); }
     }
 
     .wish-text {
@@ -423,26 +378,25 @@
       font-size: 14px;
       color: var(--teal);
       font-weight: 500;
-      margin-top: 6px;
-      letter-spacing: 0.02em;
+      margin-top: 4px;
     }
 
-    /* --------- Cake Cutting Scene --------- */
+    /* --------- Scene 3: cake cutting --------- */
     .cut-wrap {
       position: relative;
-      width: 200px;
-      height: 200px;
-      margin: 12px 0 10px;
+      width: 210px;
+      height: 210px;
+      margin: 8px 0 6px;
     }
 
     .cake-round {
-      width: 200px;
-      height: 200px;
+      width: 210px;
+      height: 210px;
       border-radius: 50%;
       background: radial-gradient(circle at 50% 42%, #fff 0 0) content-box, conic-gradient(from 0deg, var(--frosting) 0deg 359.9deg, var(--frosting) 360deg);
       position: relative;
       overflow: hidden;
-      box-shadow: inset 0 0 10px rgba(255,255,255,0.4);
+      box-shadow: inset 0 0 10px rgba(255,255,255,0.5);
     }
 
     .cake-round::before {
@@ -451,36 +405,36 @@
       inset: 0;
       border-radius: 50%;
       background: repeating-conic-gradient(var(--pink) 0deg 8deg, transparent 8deg 16deg);
-      opacity: 0.3;
+      opacity: 0.35;
     }
 
     .slice-out {
       position: absolute;
-      width: 75px;
-      height: 75px;
+      width: 80px;
+      height: 80px;
       top: 50%;
       left: 50%;
       background: linear-gradient(135deg, var(--frosting), var(--pink));
       clip-path: polygon(50% 50%, 100% 0, 100% 100%);
       transform: translate(-50%, -50%) scale(0.001);
-      transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), left 0.6s ease, top 0.6s ease;
+      transition: transform 0.6s cubic-bezier(.2,.8,.3,1.2), left 0.6s ease, top 0.6s ease;
       border-radius: 4px;
     }
 
     .slice-out.slid {
-      transform: translate(55px, 35px) scale(1) rotate(15deg);
+      transform: translate(60px, 40px) scale(1) rotate(12deg);
     }
 
-    /* --------- Flowers Field Scene --------- */
+    /* --------- Scene 4: flowers --------- */
     .field {
       position: relative;
       width: 100%;
       height: 120px;
-      margin: 12px 0 8px;
+      margin: 8px 0 4px;
       display: flex;
       align-items: flex-end;
       justify-content: center;
-      gap: 16px;
+      gap: 14px;
     }
 
     .flower {
@@ -488,14 +442,14 @@
       flex-direction: column;
       align-items: center;
       transform: scale(0);
-      animation: bloom 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      animation: bloom 0.6s cubic-bezier(.2,.8,.3,1.3) forwards;
     }
 
-    .flower:nth-child(1) { animation-delay: 0.1s; }
+    .flower:nth-child(1) { animation-delay: 0.15s; }
     .flower:nth-child(2) { animation-delay: 0.25s; }
-    .flower:nth-child(3) { animation-delay: 0.4s; }
+    .flower:nth-child(3) { animation-delay: 0.45s; }
     .flower:nth-child(4) { animation-delay: 0.55s; }
-    .flower:nth-child(5) { animation-delay: 0.7s; }
+    .flower:nth-child(5) { animation-delay: 0.75s; }
 
     @keyframes bloom {
       to { transform: scale(1); }
@@ -503,38 +457,38 @@
 
     .petals {
       position: relative;
-      width: 32px;
-      height: 32px;
+      width: 34px;
+      height: 34px;
     }
 
     .petal {
       position: absolute;
-      width: 15px;
-      height: 15px;
+      width: 16px;
+      height: 16px;
       border-radius: 50% 50% 50% 0;
-      top: 8px;
-      left: 8px;
+      top: 9px;
+      left: 9px;
     }
 
-    .petal:nth-child(1) { transform: rotate(0deg) translate(9px) rotate(0deg); }
-    .petal:nth-child(2) { transform: rotate(72deg) translate(9px) rotate(-72deg); }
-    .petal:nth-child(3) { transform: rotate(144deg) translate(9px) rotate(-144deg); }
-    .petal:nth-child(4) { transform: rotate(216deg) translate(9px) rotate(-216deg); }
-    .petal:nth-child(5) { transform: rotate(288deg) translate(9px) rotate(-288deg); }
+    .petal:nth-child(1) { transform: rotate(0deg) translate(10px) rotate(0deg); }
+    .petal:nth-child(2) { transform: rotate(72deg) translate(10px) rotate(-72deg); }
+    .petal:nth-child(3) { transform: rotate(144deg) translate(10px) rotate(-144deg); }
+    .petal:nth-child(4) { transform: rotate(216deg) translate(10px) rotate(-216deg); }
+    .petal:nth-child(5) { transform: rotate(288deg) translate(10px) rotate(-288deg); }
 
     .center {
       position: absolute;
-      width: 11px;
-      height: 11px;
+      width: 12px;
+      height: 12px;
       border-radius: 50%;
       background: var(--gold);
-      top: 10px;
-      left: 10px;
+      top: 11px;
+      left: 11px;
     }
 
     .stem {
       width: 3px;
-      height: 48px;
+      height: 46px;
       background: var(--teal);
       border-radius: 2px;
     }
@@ -544,13 +498,13 @@
       top: -20px;
       z-index: 5;
       pointer-events: none;
-      border-radius: 1px;
+      border-radius: 2px;
     }
   </style>
 </head>
 <body>
 
-  <!-- Dynamic background art matrices -->
+  <!-- Background layers -->
   <div class="bg-photos-container" id="bgPhotosContainer"></div>
   <div class="bg-quotes-container" id="bgQuotesContainer"></div>
 
@@ -559,23 +513,21 @@
   <div class="stage">
     <div class="card">
       
-      <!-- Stage 1: Intro Menu Layout -->
       <div class="scene active" data-scene="1">
         <div class="eyebrow">A small celebration</div>
-        <div class="h1-light">Happy <span class="h1-italic">Birthday</span></div>
-        <div class="h1-bold">Sidhvi</div>
+        <h1>Happy <span>Birthday</span></h1>
+        <h1>Sidhvi Anna</h1>
         <div class="sub">Wishing you a day that feels exactly as good as it should — and a year ahead that's even better.</div>
         <div class="row">
           <button class="btn" id="celebrateBtn">Celebrate 🎉</button>
-          <button class="btn ghost" onclick="goTo(2)">Next <span>➔</span></button>
+          <button class="btn ghost" onclick="goTo(2)">Next →</button>
         </div>
         <div class="dots" id="dots"></div>
       </div>
 
-      <!-- Stage 2: Birthday Candle Interaction -->
       <div class="scene" data-scene="2">
         <div class="eyebrow">Make a wish</div>
-        <div class="h1-light" style="font-size:30px; margin-bottom:8px;">Light the candles</div>
+        <h1 style="font-size:clamp(26px,5vw,34px)">Light the candles</h1>
         <div class="candle-cake">
           <div class="tier top"></div>
           <div class="tier bottom"></div>
@@ -583,38 +535,36 @@
         </div>
         <div class="wish-text" id="wishText">Click below to blow them out.</div>
         <div class="row">
-          <button class="btn ghost" onclick="goTo(1)"><span>➔</span> Back</button>
+          <button class="btn ghost" onclick="goTo(1)">← Back</button>
           <button class="btn" id="blowBtn">Blow out 💨</button>
-          <button class="btn ghost" id="toCutBtn" style="display:none" onclick="goTo(3)">Next <span>➔</span></button>
+          <button class="btn ghost" id="toCutBtn" style="display:none" onclick="goTo(3)">Next →</button>
         </div>
         <div class="dots"></div>
       </div>
 
-      <!-- Stage 3: Cake Component Cutting Interaction -->
       <div class="scene" data-scene="3">
         <div class="eyebrow">The best part</div>
-        <div class="h1-light" style="font-size:30px; margin-bottom:8px;">Cut the cake</div>
+        <h1 style="font-size:clamp(26px,5vw,34px)">Cut the cake</h1>
         <div class="cut-wrap">
           <div class="cake-round" id="cakeRound"></div>
           <div class="slice-out" id="sliceOut"></div>
         </div>
         <div class="wish-text" id="cutText">Tap the knife to cut a slice.</div>
         <div class="row">
-          <button class="btn ghost" onclick="goTo(2)"><span>➔</span> Back</button>
+          <button class="btn ghost" onclick="goTo(2)">← Back</button>
           <button class="btn knife-btn" id="cutBtn">🔪 Cut a slice</button>
-          <button class="btn ghost" id="toFlowersBtn" style="display:none" onclick="goTo(4)">Next <span>➔</span></button>
+          <button class="btn ghost" id="toFlowersBtn" style="display:none" onclick="goTo(4)">Next →</button>
         </div>
         <div class="dots"></div>
       </div>
 
-      <!-- Stage 4: Premium Flower Reveal Page Layout -->
       <div class="scene" data-scene="4">
         <div class="eyebrow">One more thing</div>
-        <div class="h1-light" style="font-size:30px; margin-bottom:4px;">Flowers for you 💐</div>
+        <h1 style="font-size:clamp(26px,5vw,34px)">Flowers for you 💐</h1>
         <div class="field" id="field"></div>
         <div class="sub">However you're celebrating — hope it's full of good food, good people, and a little bit of magic.</div>
         <div class="row">
-          <button class="btn ghost" onclick="goTo(3)"><span>➔</span> Back</button>
+          <button class="btn ghost" onclick="goTo(3)">← Back</button>
           <button class="btn" id="finalBtn">Happy Birthday! 🎈</button>
         </div>
         <div class="dots"></div>
@@ -624,7 +574,7 @@
   </div>
 
   <script>
-    /* --------- APPLICATION MEDIA ASSETS --------- */
+    /* --------- MY PHOTOS ARRAY --------- */
     const myPhotos = [
       "2J2A7207.jpg",
       "2J2A7217.jpg",
@@ -637,6 +587,7 @@
       "2J2A8086.jpg"
     ];
 
+    /* --------- Moving Text Quotes Engine --------- */
     const quotes = [
       "They say you don't choose your family, but if I could choose a brother today, I’d still pick you.",
       "We don't always say it, but I really value the bond between us. Happy birthday to a great brother.",
@@ -644,11 +595,9 @@
       "To more memories, more laughs, and many more birthdays.",
       "Happy Birthday, Anna. Thanks for being someone I can always look up to.",
       "Wishing you all the happiness you deserve. Happy Birthday, Anna.",
-      "Some bonds just find their way back. Happy Birthday, Anna. 🤍",
-      "Some things become more meaningful with time. Our bond is one of them."
+      "Some bonds just find their way back. Happy Birthday, Anna. 🤍"
     ];
 
-    /* --------- Typography Text Quotes Stream Engine --------- */
     const bgQuotesContainer = document.getElementById('bgQuotesContainer');
     let lastSide = 0; 
 
@@ -660,16 +609,16 @@
       
       let leftPosition;
       if (lastSide === 0) {
-        leftPosition = Math.random() * 7; 
+        leftPosition = Math.random() * 8; 
         lastSide = 1;
       } else {
-        leftPosition = 79 + Math.random() * 5; 
+        leftPosition = 78 + Math.random() * 6; 
         lastSide = 0;
       }
       quoteEl.style.left = leftPosition + 'vw';
       
-      const duration = 16 + Math.random() * 5; 
-      const delay = Math.random() * 1.5; 
+      const duration = 14 + Math.random() * 6; 
+      const delay = Math.random() * 2; 
       const randomRotation = (Math.random() * 10 - 5) + 'deg'; 
       
       quoteEl.style.setProperty('--dur', duration + 's');
@@ -684,28 +633,27 @@
     }
 
     for (let i = 0; i < 4; i++) {
-      setTimeout(() => spawnQuote(), i * 3800);
+      setTimeout(() => spawnQuote(), i * 3500);
     }
-    setInterval(spawnQuote, 6500);
+    setInterval(spawnQuote, 6000);
 
-    /* --------- Scrapbook Composition Photo Engine --------- */
+    /* --------- Background Photo Grid Coordinates Engine --------- */
     const bgPhotosContainer = document.getElementById('bgPhotosContainer');
 
     function initializePhotos() {
-      // 2. Intentional Editorial Grid Asymmetry Placements
       const exactPositions = [
-        { top: '5vh',   left: '3vw',  rot: '-6deg',  driftX: '12px',  driftY: '-15px', driftR: '2deg', isHorizontal: false }, 
-        { top: '4vh',   left: '42vw', rot: '4deg',   driftX: '-8px',  driftY: '-25px', driftR: '-1deg', isHorizontal: false }, 
-        { top: '7vh',   left: '83vw', rot: '8deg',   driftX: '15px',  driftY: '-12px', driftR: '3deg', isHorizontal: false }, 
+        { top: '6vh',   left: '4vw',  isHorizontal: false }, 
+        { top: '6vh',   left: '44vw', isHorizontal: false }, 
+        { top: '6vh',   left: '84vw', isHorizontal: false }, 
         
-        { top: '42vh',  left: '2vw',  rot: '-9deg',  driftX: '20px',  driftY: '-10px', driftR: '-2deg', isHorizontal: false }, 
-        { top: '35vh',  left: '86vw', rot: '5deg',   driftX: '-15px', driftY: '-20px', driftR: '2deg', isHorizontal: false }, 
+        { top: '38vh',  left: '3vw',  isHorizontal: false }, 
+        { top: '38vh',  left: '86vw', isHorizontal: false }, 
         
-        { top: '71vh',  left: '3vw',  rot: '7deg',   driftX: '10px',  driftY: '-30px', driftR: '1deg', isHorizontal: false }, 
-        { top: '87vh',  left: '40vw', rot: '-2deg',  driftX: '-5px',  driftY: '-15px', driftR: '-2deg', isHorizontal: true }, 
-        { top: '69vh',  left: '83vw', rot: '-5deg',  driftX: '-12px', driftY: '-25px', driftR: '3deg', isHorizontal: false }, 
+        { top: '72vh',  left: '4vw',  isHorizontal: false }, 
+        { top: '87vh',  left: '41vw', isHorizontal: true }, 
+        { top: '72vh',  left: '84vw', isHorizontal: false }, 
         
-        { top: '46vh',  left: '11vw', rot: '11deg',  driftX: '18px',  driftY: '-18px', driftR: '-3deg', isHorizontal: false }
+        { top: '48vh',  left: '12vw', isHorizontal: false }
       ];
 
       myPhotos.forEach((src, index) => {
@@ -715,19 +663,19 @@
         img.className = 'drifting-photo' + (pos.isHorizontal ? ' horizontal-slot' : '');
         img.src = src;
         
-        img.style.top = pos.top;
-        img.style.left = pos.left;
+        const scatterTop = parseFloat(pos.top) + (Math.random() * 2 - 1);
+        const scatterLeft = parseFloat(pos.left) + (Math.random() * 2 - 1);
+        
+        img.style.top = scatterTop + 'vh';
+        img.style.left = scatterLeft + 'vw';
 
-        // Custom Bezier values parsed to variables
-        const duration = 18 + Math.random() * 6; 
-        const delay = Math.random() * -10; 
+        const duration = 15 + Math.random() * 8; 
+        const delay = Math.random() * -12; 
+        const rot = (Math.random() * 14 - 7) + 'deg';
 
         img.style.setProperty('--dur', duration + 's');
         img.style.setProperty('--delay', delay + 's');
-        img.style.setProperty('--rot', pos.rot);
-        img.style.setProperty('--driftX', pos.driftX);
-        img.style.setProperty('--driftY', pos.driftY);
-        img.style.setProperty('--driftR', pos.driftR);
+        img.style.setProperty('--rot', rot);
 
         bgPhotosContainer.appendChild(img);
       });
@@ -735,7 +683,7 @@
     
     initializePhotos();
 
-    /* --------- Decorative Streamers Engine --------- */
+    /* --------- streamers --------- */
     const streamerColors = ['#FF5FA2', '#FFB627', '#1FBFA8', '#6E3ACB'];
     const streamerContainer = document.getElementById('streamers');
     for (let i = 0; i < 12; i++) {
@@ -743,11 +691,11 @@
       s.className = 'streamer';
       s.style.left = (i / 9 * 100) + '%';
       s.style.background = streamerColors[i % streamerColors.length];
-      s.style.animationDelay = (i * 0.4) + 's';
+      s.style.animationDelay = (i * 0.3) + 's';
       streamerContainer.appendChild(s);
     }
 
-    /* --------- Particle Physics Confetti Burst Engine --------- */
+    /* --------- confetti --------- */
     function burstConfetti(n = 80) {
       const colors = ['#FF5FA2', '#FFB627', '#1FBFA8', '#6E3ACB', '#FFF7EC'];
       for (let i = 0; i < n; i++) {
@@ -758,9 +706,9 @@
         c.style.height = size * 0.4 + 'px';
         c.style.background = colors[Math.floor(Math.random() * colors.length)];
         c.style.left = Math.random() * 100 + 'vw';
-        const duration = 2.6 + Math.random() * 1.8;
+        const duration = 2.5 + Math.random() * 2;
         const rotation = Math.random() * 720;
-        c.style.transition = `transform ${duration}s cubic-bezier(0.1, 0.8, 0.3, 1), top ${duration}s cubic-bezier(0.1, 0.8, 0.3, 1), opacity ${duration}s ease`;
+        c.style.transition = `transform ${duration}s cubic-bezier(0.2,0.6,0.4,1), top ${duration}s cubic-bezier(0.2,0.6,0.4,1), opacity ${duration}s ease`;
         document.body.appendChild(c);
 
         requestAnimationFrame(() => {
@@ -777,7 +725,7 @@
     document.getElementById('finalBtn').addEventListener('click', () => burstConfetti(120));
     window.addEventListener('load', () => setTimeout(() => burstConfetti(), 400));
 
-    /* --------- Application Navigation Controller --------- */
+    /* --------- scene navigation --------- */
     const totalScenes = 4;
     const dotsContainers = document.querySelectorAll('.dots');
 
@@ -801,7 +749,7 @@
 
     renderDots(1);
 
-    /* --------- Candle Operations Engine --------- */
+    /* --------- candles --------- */
     const candlesWrap = document.getElementById('candlesWrap');
     const candleCount = 5;
 
@@ -810,7 +758,7 @@
       candle.className = 'candle';
       const flame = document.createElement('div');
       flame.className = 'flame';
-      flame.style.animationDelay = (i * 0.12) + 's';
+      flame.style.animationDelay = (i * 0.15) + 's';
       const smoke = document.createElement('div');
       smoke.className = 'smoke';
       
@@ -829,7 +777,7 @@
           f.classList.add('out');
           const smoke = f.nextElementSibling;
           smoke.classList.add('go');
-        }, i * 140);
+        }, i * 120);
       });
 
       document.getElementById('wishText').textContent = "Wish made ✨ - here's to a wonderful year ahead.";
@@ -837,7 +785,7 @@
       document.getElementById('blowBtn').disabled = true;
     });
 
-    /* --------- Slice Splitting Operations Engine --------- */
+    /* --------- cake cutting --------- */
     let sliced = false;
     document.getElementById('cutBtn').addEventListener('click', () => {
       if (sliced) return;
@@ -849,7 +797,7 @@
       document.getElementById('cutBtn').disabled = true;
     });
 
-    /* --------- Floral Field Rendering Matrix --------- */
+    /* --------- flowers --------- */
     const flowerColors = [
       {petal: '#FF5FA2'}, {petal: '#FFB627'}, {petal: '#6E3ACB'}, {petal: '#1FBFA8'}, {petal: '#FFE9C7'}
     ];
